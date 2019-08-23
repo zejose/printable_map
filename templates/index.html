@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printable Map</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .navigation {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="navigation">
+            <form method="post">
+                {{ form.hidden_tag() }}
+                <div class="row">
+                    <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
+                        {{ form.search(style='margin-top: 5px', placeholder='Search...') }}
+                        {{ form.submit(class='btn btn-success btn-sm') }}
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                        <a href="{{ url_for('save_png') }}" target="_blank" class="btn btn-success" title="Save as PNG">
+                            <i class="fa fa-camera"></i>
+                        </a>
+                        <a href="{{ url_for('save_pdf') }}" target="_blank" class="btn btn-success" title="Save as PDF">
+                            <i class="fa fa-file"></i>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {{ html_map|safe }}
+    </div>
+</body>
+
+</html>
