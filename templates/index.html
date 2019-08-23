@@ -9,7 +9,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         .navigation {
+            position: fixed;
+            right: 50px;
+            top: 50px;
             padding: 10px;
+            z-index: 9999;
+            background: rgba(255, 255, 255, .8);
+            border-radius: 5%;
         }
     </style>
 </head>
@@ -19,12 +25,18 @@
         <div class="navigation">
             <form method="post">
                 {{ form.hidden_tag() }}
-                <div class="row">
-                    <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-                        {{ form.search(style='margin-top: 5px', placeholder='Search...') }}
-                        {{ form.submit(class='btn btn-success btn-sm') }}
+                {{ form.search.label() }}
+                {{ form.search(style='margin-top: 5px', placeholder='Search...', class='form-control') }}
+                {{ form.zoom.label() }}
+                {{ form.zoom(style='margin-top: 5px', placeholder='Zoom', class='form-control') }}
+                {{ form.map_style.label() }}
+                {{ form.map_style(class='form-control') }}
+
+                <div class="row mt-3">
+                    <div class="col-6">
+                        {{ form.submit(class='btn btn-success') }}
                     </div>
-                    <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                    <div class="col-6">
                         <a href="{{ url_for('save_png') }}" target="_blank" class="btn btn-success" title="Save as PNG">
                             <i class="fa fa-camera"></i>
                         </a>
@@ -33,6 +45,7 @@
                         </a>
                     </div>
                 </div>
+
             </form>
         </div>
         {{ html_map|safe }}
