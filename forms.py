@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SelectField, SubmitField
+from wtforms.validators import DataRequired, Length
 
 
 class NavigationForm(FlaskForm):
@@ -12,7 +13,8 @@ class NavigationForm(FlaskForm):
         'Theme',
         choices=[
             ('OpenStreetMap', 'OpenStreetMap'),
-            ('stamenterrain', 'stamenterrain')
+            ('stamenterrain', 'stamenterrain'),
+            ('stamentoner', 'stamentoner'),
         ]
     )
 

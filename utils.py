@@ -3,6 +3,7 @@ import time
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import pdfkit
+# import imgkit
 
 def map_to_png(map):
     '''
@@ -13,16 +14,22 @@ def map_to_png(map):
     Arguments: map (folium.map)
     '''
     path = 'usermaps/html/current_map.html'
-    tmpurl = 'file://{path}/{mapfile}'.format(path=os.getcwd(),mapfile=path)
     map.save(path)
-    #Open a browser window...
-    browser = webdriver.Chrome((ChromeDriverManager().install()))
-    #..that displays the map...
+    tmpurl = 'file://{path}/{mapfile}'.format(path=os.getcwd(),mapfile=path)
+    # Config the Headless Chrome
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--ignore-certificate-errors')
+    # Open a browser window...
+    browser = webdriver.Chrome((ChromeDriverManager().install()), chrome_options=chrome_options)
+    # get page
     browser.get(tmpurl)
-    #Grab the screenshot
+    # wait to load page
+    # time.sleep(1)
+    # Grab the screenshot
     png_path = 'usermaps/png/map.png'
     browser.save_screenshot(png_path)
-    #Close the browser
+    # Close the browser
     browser.quit()
     return png_path
 
@@ -43,5 +50,13 @@ def map_to_html(map):
 def map_to_pdf(html_path):
     pdf_path = 'usermaps/pdf/current_map.pdf'
     # create pdf
-    pdfkit.from_file(html_path, pdf_path)
+    options = {
+        'page-size': 'A4',
+        'margin-top': '0.75in',
+        'margin-right': '0.75in',
+        'margin-bottom': '0.75in',
+        'margin-left': '0.75in',
+    }
+    with open('usermaps/png/map.png', 'r') as image_file:
+        pdfkit.from_file(image_file, pdf_path, options=options)
     return pdf_path

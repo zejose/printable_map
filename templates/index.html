@@ -7,13 +7,26 @@
     <title>Printable Map</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
     <style>
+        .d-none {
+            display: none;
+        }
+
+        .alert {
+            position: fixed;
+            top: 0%;
+            right: 40%;
+            left: 40%;
+            z-index: 9999;
+        }
+
         .navigation {
             position: fixed;
-            right: 50px;
-            top: 50px;
+            right: 10px;
+            top: 10px;
             padding: 10px;
-            z-index: 9999;
+            z-index: 9998;
             background: rgba(255, 255, 255, .8);
             border-radius: 5%;
         }
@@ -21,9 +34,45 @@
 </head>
 
 <body>
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div id="alert" class="alert alert-{{ category }} alert-dismissible top-fixed animated fadeInDown" role="alert">
+        <button type="button" class="close" aria-label="Close" onclick="document.getElementById('alert').classList.add('d-none');">
+            <span aria-hidden="true"><i class="fa fa-times"></i>
+            </span>
+        </button>
+        {{ message }}
+    </div>
+    {% endfor %}
+    <script>
+        let div = document.getElementById('alert-msg');
+        let display_time = 9500 // message display time in ms
+        setTimeout(function () {
+            try {
+                div.classList.remove('fadeInDown');
+                div.classList.add('fadeOutDown'); // fade out 
+            }
+            catch (e) {
+                console.log(e); // Error log
+            }
+        }, display_time)
+        setTimeout(function () {
+            try {
+                div.remove();
+            }
+            catch (e) {
+                console.log(e);
+            }
+        }, display_time + 500) 
+    </script>
+    {% endif %}
+    {% endwith %}
+
     <div class="main">
         <div class="navigation">
-            <form method="post">
+            <form id="map_nav" method="post">
                 {{ form.hidden_tag() }}
                 {{ form.search.label() }}
                 {{ form.search(style='margin-top: 5px', placeholder='Search...', class='form-control') }}
@@ -51,5 +100,7 @@
         {{ html_map|safe }}
     </div>
 </body>
-
+<footer>
+    <span>BFM Projects &copy; 2019</span>
+</footer>
 </html>
