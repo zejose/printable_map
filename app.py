@@ -12,9 +12,9 @@ geolocator = Nominatim(user_agent="specify_your_app_name_here")
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    # Search bar & Button
+    # load NavigationForm
     form = NavigationForm()
-    # submit form
+    # check if submitted form is valid
     if form.validate_on_submit():
         # get lat & long of input address
         try:
@@ -28,19 +28,26 @@ def home():
             coords = (45.5236, -122.6750)
             # default zoom
             zoom = 12
-            map_style = 'stamenterrain'
+            map_style = 'OpenStreetMap'
     else:
         # default coords
         coords = (45.5236, -122.6750)
         # default zoom
         zoom = 12
-        map_style = 'stamenterrain'
+        map_style = 'OpenStreetMap'
     # create map
     map = Map(location=coords, prefer_canvas=True, zoom_start=zoom)
     # add TileLayer / set map_style
     TileLayer(map_style).add_to(map)
     # add marker for current search result
-    CircleMarker(location=coords, radius=12, fill_color='coral', color='red', fill_opacity=0.8).add_to(map)
+    tooltip = str(coords)
+    CircleMarker(
+        location=coords, 
+        radius=12, 
+        fill_color='coral', 
+        color='red', 
+        fill_opacity=0.5,
+        tooltip=tooltip).add_to(map)
     soup = BS(map._repr_html_(), features='html.parser')
     context = {
         'form': form,
@@ -60,7 +67,6 @@ def save_png():
     zoom = session.get('zoom', None)
     map_style = session.get('map_style', None)
     # create map
-    # FIX FIXED ZOOM BUG
     map = Map(location=coords, prefer_canvas=True, zoom_start=zoom)
     # add TileLayer / set map_style
     TileLayer(map_style).add_to(map)

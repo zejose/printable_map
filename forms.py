@@ -15,6 +15,8 @@ class NavigationForm(FlaskForm):
             ('OpenStreetMap', 'OpenStreetMap'),
             ('stamenterrain', 'stamenterrain'),
             ('stamentoner', 'stamentoner'),
+            ('CartoDB positron', 'CartoDB positron'),
+            ('CartoDB dark_matter', 'CartoDB dark_matter')
         ]
     )
 
