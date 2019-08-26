@@ -16,8 +16,8 @@
         .alert {
             position: fixed;
             top: 0%;
-            right: 40%;
-            left: 40%;
+            right: 35%;
+            left: 35%;
             z-index: 9999;
         }
 
@@ -29,6 +29,12 @@
             z-index: 9998;
             background: rgba(255, 255, 255, .8);
             border-radius: 5%;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0.625rem;
+            left: 0.625rem;
         }
     </style>
 </head>
@@ -47,7 +53,7 @@
     </div>
     {% endfor %}
     <script>
-        let div = document.getElementById('alert-msg');
+        let div = document.getElementById('alert');
         let display_time = 9500 // message display time in ms
         setTimeout(function () {
             try {
