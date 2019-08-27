@@ -13,7 +13,8 @@ def map_to_png(map):
 
     Arguments: map (folium.map)
     '''
-    path = 'usermaps/html/current_map.html'
+    path = f'usermaps/html/{map.location[0]}_{map.location[1]}.html'
+    print('HTML Path: ', path)
     map.save(path)
     tmpurl = 'file://{path}/{mapfile}'.format(path=os.getcwd(),mapfile=path)
     # Config the Headless Chrome
@@ -25,9 +26,9 @@ def map_to_png(map):
     # get page
     browser.get(tmpurl)
     # wait to load page
-    # time.sleep(1)
+    time.sleep(1)
     # Grab the screenshot
-    png_path = 'usermaps/png/map.png'
+    png_path = f'usermaps/png/{map.location[0]}_{map.location[1]}.png'
     browser.save_screenshot(png_path)
     # Close the browser
     browser.quit()

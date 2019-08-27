@@ -3,12 +3,12 @@ from forms import NavigationForm
 from folium import Map, CircleMarker, TileLayer
 from geopy.geocoders import Nominatim
 from bs4 import BeautifulSoup as BS
-from utils import map_to_png, map_to_html, map_to_pdf
+from utils import map_to_png#, map_to_html, map_to_pdf
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '$uper_$ecret_K€Y'
 
-geolocator = Nominatim(user_agent="specify_your_app_name_here")
+geolocator = Nominatim(user_agent='PrintMap')
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -17,33 +17,37 @@ def home():
     # check if submitted form is valid
     if form.validate_on_submit():
         # get lat & long of input address
+        print('submitted!')
         try:
             location = geolocator.geocode(form.search.data)
             coords = (location.latitude, location.longitude)
-            zoom = int(form.zoom.data)
             map_style = form.map_style.data
         except AttributeError:
             flash('Invalid search query!', 'danger')
             # default coords
             coords = (45.5236, -122.6750)
-            # default zoom
-            zoom = 12
             map_style = 'OpenStreetMap'
+        print('\n\nZoom input: ', form.zoom.data)
+        if form.zoom.data != None:
+            zoom = form.zoom.data
+        else:
+            # default zoom
+            zoom = 13
     else:
         # default coords
         coords = (45.5236, -122.6750)
         # default zoom
-        zoom = 12
+        zoom = 13
         map_style = 'OpenStreetMap'
     # create map
-    map = Map(location=coords, prefer_canvas=True, zoom_start=zoom)
+    map = Map(location=coords, prefer_canvas=True, zoom_start=zoom, png_enabled=True)
     # add TileLayer / set map_style
     TileLayer(map_style).add_to(map)
     # add marker for current search result
     tooltip = str(coords)
     CircleMarker(
         location=coords, 
-        radius=12, 
+        radius=15, 
         fill_color='coral', 
         color='red', 
         fill_opacity=0.5,
@@ -67,28 +71,28 @@ def save_png():
     zoom = session.get('zoom', None)
     map_style = session.get('map_style', None)
     # create map
-    map = Map(location=coords, prefer_canvas=True, zoom_start=zoom)
+    map = Map(location=coords, prefer_canvas=True, zoom_start=zoom, control_scale=False, zoom_control=False)
     # add TileLayer / set map_style
     TileLayer(map_style).add_to(map)
     # save map as png and return path
-    path = map_to_png(map)
+    png_path = map_to_png(map)
     # show image of map
-    return send_file(path)
+    return send_file(png_path)
 
-@app.route('/save_pdf', methods=['GET', 'POST'])
-def save_pdf():
-    # get coords from session
-    coords = session.get('coords', None)
-    zoom = session.get('zoom', None)
-    map_style = session.get('map_style', None)
-    # create map
-    map = Map(location=coords, prefer_canvas=True, zoom_start=zoom)
-    # add TileLayer / set map_style
-    TileLayer(map_style).add_to(map)
-    # create html map and store path
-    html_map = map_to_html(map)
-    pdf_path = map_to_pdf(html_map)
-    return send_file(pdf_path, None)
+# @app.route('/save_pdf', methods=['GET', 'POST'])
+# def save_pdf():
+#     # get coords from session
+#     coords = session.get('coords', None)
+#     zoom = session.get('zoom', None)
+#     map_style = session.get('map_style', None)
+#     # create map
+#     map = Map(location=coords, prefer_canvas=True, zoom_start=zoom, control_scale=False, zoom_control=False)
+#     # add TileLayer / set map_style
+#     TileLayer(map_style).add_to(map)
+#     # create html map and store path
+#     html_map = map_to_html(map)
+#     pdf_path = map_to_pdf(html_map)
+#     return send_file(pdf_path, None)
 
 
 if __name__ == "__main__":

@@ -88,16 +88,16 @@
                 {{ form.map_style(class='form-control') }}
 
                 <div class="row mt-3">
-                    <div class="col-6">
+                    <div class="col-8">
                         {{ form.submit(class='btn btn-success') }}
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
                         <a href="{{ url_for('save_png') }}" target="_blank" class="btn btn-success" title="Save as PNG">
                             <i class="fa fa-camera"></i>
                         </a>
-                        <a href="{{ url_for('save_pdf') }}" target="_blank" class="btn btn-success" title="Save as PDF">
+                        <!-- <a href="{#{ url_for('save_pdf') }#}" target="_blank" class="btn btn-success" title="Save as PDF">
                             <i class="fa fa-file"></i>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
 
