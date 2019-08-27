@@ -3,7 +3,7 @@ from forms import NavigationForm
 from folium import Map, CircleMarker, TileLayer
 from geopy.geocoders import Nominatim
 from bs4 import BeautifulSoup as BS
-from utils import map_to_png#, map_to_html, map_to_pdf
+from utils import map_to_png, map_to_html, map_to_pdf
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '$uper_$ecret_K€Y'
@@ -79,20 +79,22 @@ def save_png():
     # show image of map
     return send_file(png_path)
 
-# @app.route('/save_pdf', methods=['GET', 'POST'])
-# def save_pdf():
-#     # get coords from session
-#     coords = session.get('coords', None)
-#     zoom = session.get('zoom', None)
-#     map_style = session.get('map_style', None)
-#     # create map
-#     map = Map(location=coords, prefer_canvas=True, zoom_start=zoom, control_scale=False, zoom_control=False)
-#     # add TileLayer / set map_style
-#     TileLayer(map_style).add_to(map)
-#     # create html map and store path
-#     html_map = map_to_html(map)
-#     pdf_path = map_to_pdf(html_map)
-#     return send_file(pdf_path, None)
+@app.route('/save_pdf', methods=['GET', 'POST'])
+def save_pdf():
+    # get coords from session
+    coords = session.get('coords', None)
+    zoom = session.get('zoom', None)
+    map_style = session.get('map_style', None)
+    # create map
+    map = Map(location=coords, prefer_canvas=True, zoom_start=zoom, control_scale=False, zoom_control=False)
+    # add TileLayer / set map_style
+    TileLayer(map_style).add_to(map)
+    pdf_path = map_to_pdf(map)
+
+    # # create html map and store path
+    # html_map = map_to_html(map)
+    # pdf_path = map_to_pdf(html_map)
+    return send_file(pdf_path, None)
 
 
 if __name__ == "__main__":

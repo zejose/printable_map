@@ -2,8 +2,10 @@ import os
 import time
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-import pdfkit
-# import imgkit
+from PIL import Image
+# import pdfkit
+import img2pdf
+
 
 def map_to_png(map):
     '''
@@ -11,7 +13,7 @@ def map_to_png(map):
 
     Returns: path of png file
 
-    Arguments: map (folium.map)
+    Parameter: map (folium.map)
     '''
     path = f'usermaps/html/{map.location[0]}_{map.location[1]}.html'
     print('HTML Path: ', path)
@@ -32,10 +34,43 @@ def map_to_png(map):
     browser.save_screenshot(png_path)
     # Close the browser
     browser.quit()
-    # delete html template
-    os.remove(f'usermaps/html/{map.location[0]}_{map.location[1]}.html')
     return png_path
 
+
+def map_to_pdf(map):
+    '''
+    Save a map as pdf file
+
+    Returns: path of pdf file
+
+    Parameter: map (folium.map)
+    '''
+    png_path = map_to_png(map)
+    pdf_path = f'usermaps/pdf/{map.location[0]}_{map.location[1]}.pdf'
+            
+    # opening image 
+    image = Image.open(png_path) 
+
+    # remove alpha channel
+    image.convert('RGB').save(png_path)
+    
+    # converting into chunks using img2pdf 
+    pdf_bytes = img2pdf.convert(image.filename) 
+    
+    # opening or creating pdf file 
+    file = open(pdf_path, "wb") 
+    
+    # writing pdf files with chunks 
+    file.write(pdf_bytes) 
+    
+    # closing image file 
+    image.close() 
+    
+    # closing pdf file 
+    file.close() 
+    
+    print("\nSuccessfully made pdf file\n") 
+    return pdf_path
 
 def map_to_html(map):
     '''
@@ -43,23 +78,24 @@ def map_to_html(map):
 
     Returns: path of html file
 
-    Arguments: map (folium.map)
+    Parameter: map (folium.map)
     '''
     path = 'usermaps/html/current_map.html'
     map.save(path)
     return path
 
 
-def map_to_pdf(html_path):
-    pdf_path = 'usermaps/pdf/current_map.pdf'
-    # create pdf
-    options = {
-        'page-size': 'A4',
-        'margin-top': '0.75in',
-        'margin-right': '0.75in',
-        'margin-bottom': '0.75in',
-        'margin-left': '0.75in',
-    }
-    with open('usermaps/png/map.png', 'r') as image_file:
-        pdfkit.from_file(image_file, pdf_path, options=options)
-    return pdf_path
+# def map_to_pdf(html_path):
+#     pdf_path = 'usermaps/pdf/current_map.pdf'
+#     # create pdf
+#     options = {
+#         'page-size': 'A4',
+#         'margin-top': '0.75in',
+#         'margin-right': '0.75in',
+#         'margin-bottom': '0.75in',
+#         'margin-left': '0.75in',
+#     }
+#     with open('usermaps/png/map.png', 'r') as image_file:
+#         time.sleep(5)
+#         pdfkit.from_file(image_file, pdf_path, options=options)
+#     return pdf_path
