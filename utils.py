@@ -32,6 +32,8 @@ def map_to_png(map):
     browser.save_screenshot(png_path)
     # Close the browser
     browser.quit()
+    # delete html template
+    os.remove(f'usermaps/html/{map.location[0]}_{map.location[1]}.html')
     return png_path
 
 

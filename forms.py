@@ -7,7 +7,7 @@ class NavigationForm(FlaskForm):
 
     search = StringField('Search')
 
-    zoom = IntegerField('Zoom', validators=[Optional()])
+    zoom = IntegerField('Zoom (8-18)', validators=[Optional()])
 
     map_style = SelectField(
         'Theme',
