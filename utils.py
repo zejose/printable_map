@@ -24,11 +24,16 @@ def map_to_png(map):
 
     # Config the Headless Chrome
     chrome_options = webdriver.ChromeOptions()
+    # set binary location for heroku build pack
+    chrome_option.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
     chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--ignore-certificate-errors')
     
     # Open headless browser...
-    browser = webdriver.Chrome((ChromeDriverManager().install()), chrome_options=chrome_options)
+    # set exec_path for heroku build pack
+    browser = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), chrome_options=chrome_options)
     
     # get page
     browser.get(tmpurl)
