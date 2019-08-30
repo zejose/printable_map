@@ -25,7 +25,7 @@ def map_to_png(map):
     # Config the Headless Chrome
     chrome_options = webdriver.ChromeOptions()
     # set binary location for heroku build pack
-    chrome_option.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
+    chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument('--no-sandbox')
