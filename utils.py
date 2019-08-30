@@ -38,6 +38,9 @@ def map_to_png(map):
     # get page
     browser.get(tmpurl)
     
+    # wait to load page
+    time.sleep(.5)
+    
     # Grab the screenshot
     png_path = f'usermaps/png/{map.location[0]}_{map.location[1]}.png'
     browser.save_screenshot(png_path)
