@@ -17,7 +17,6 @@ def home():
     # check if submitted form is valid
     if form.validate_on_submit():
         # get lat & long of input address
-        print('submitted!')
         try:
             location = geolocator.geocode(form.search.data)
             coords = (location.latitude, location.longitude)
@@ -27,7 +26,6 @@ def home():
             # default coords
             coords = (45.5236, -122.6750)
             map_style = 'OpenStreetMap'
-        print('\n\nZoom input: ', form.zoom.data)
         if form.zoom.data != None:
             zoom = form.zoom.data
         else:
